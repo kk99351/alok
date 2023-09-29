@@ -25,9 +25,10 @@ const FormPdfmodel = mongoose.Schema({
     type: String,
     required: true,
   },
+
   Type: {
     type: String,
-    required: true,
+    // required: true,
   },
 });
 
