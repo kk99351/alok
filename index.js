@@ -4,7 +4,7 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 8006;
 
-const cors = require("cors");
+const cors = require('cors');
 
 const corsOptions = {
   origin: "*", // Allow requests from all origins
@@ -13,11 +13,12 @@ const corsOptions = {
   optionsSuccessStatus: 204, // Set the response status for preflight requests
 };
 
-app.use(cors(corsOptions));
+
 
 const pdfMailer = require("./routes/PdfMailer");
 const connectDB = require("./config/ConnectDB");
 
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use("/pdf-mailer", pdfMailer);
 
