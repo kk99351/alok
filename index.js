@@ -6,19 +6,18 @@ const PORT = process.env.PORT || 8006;
 
 const cors = require('cors');
 
-const corsOptions = {
-  origin: "*", // Allow requests from all origins
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow specified HTTP methods
-  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept", // Allow specified headers
-  optionsSuccessStatus: 204, // Set the response status for preflight requests
-};
 
+app.use(cors({
+  origin: "*",
+  methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
+}));
 
 
 const pdfMailer = require("./routes/PdfMailer");
 const connectDB = require("./config/ConnectDB");
 
-app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 app.use("/pdf-mailer", pdfMailer);
 
