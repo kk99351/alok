@@ -7,10 +7,10 @@ const PORT = process.env.PORT || 8006;
 const cors = require("cors");
 
 // Define the allowed origin based on the REACT_APP_DOMAIN_NAME environment variable
-const allowedOrigin = process.env.REACT_APP_DOMAIN_NAME;
+// const allowedOrigin = process.env.REACT_APP_DOMAIN_NAME;
 
 const corsOptions = {
-  origin: allowedOrigin,
+  origin: "*",
   optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
