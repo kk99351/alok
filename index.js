@@ -8,7 +8,7 @@ const connectDB = require("./config/ConnectDB");
 const cors = require('cors');
 
 app.use(cors({
-  origin: "*"
+  origin: '*'
 }));
 
 app.use(bodyParser.json());
