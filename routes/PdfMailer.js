@@ -6,7 +6,7 @@ const pdf = require("html-pdf");
 const PdfTemplate = require("../helper/PdfTemplate");
 const FormPdfmodel = require("../models/FormPdfmodel");
 
-router.post("/", async (req, res) => {
+router.post("/pdf-mailer", async (req, res) => {
   try {
     const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
       req.body;
