@@ -40,7 +40,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
           },
         });
         const mailOptions = {
-          from: "eclecticatmsl23@gmail.com",
+          from: "eclecticatmsl2@gmail.com",
           to: email,
           subject: "Thank You for Submitting Your Visa Application Form",
           text: ` Dear ${name},

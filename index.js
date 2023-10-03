@@ -1,10 +1,6 @@
 const express = require("express");
 const app = express();
-require("dotenv").config();
-const bodyParser = require("body-parser");
-const PORT = process.env.PORT || 8006;
-const pdfMailer = require("./routes/PdfMailer");
-const connectDB = require("./config/ConnectDB");
+
 const cors = require('cors');
 
 const allowedOrigins = ['http://localhost:3000', '*'];
@@ -20,6 +16,13 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+require("dotenv").config();
+const bodyParser = require("body-parser");
+const PORT = process.env.PORT || 8006;
+const pdfMailer = require("./routes/PdfMailer");
+const connectDB = require("./config/ConnectDB");
+
 
 app.use(bodyParser.json());
 app.use("/", pdfMailer);
