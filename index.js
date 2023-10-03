@@ -6,12 +6,11 @@ const PORT = process.env.PORT || 8006;
 
 const cors = require("cors");
 
-// Define the allowed origin based on the REACT_APP_DOMAIN_NAME environment variable
-// const allowedOrigin = process.env.REACT_APP_DOMAIN_NAME;
-
 const corsOptions = {
-  origin: "*",
-  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: "*", // Allow requests from all origins
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow specified HTTP methods
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept", // Allow specified headers
+  optionsSuccessStatus: 204, // Set the response status for preflight requests
 };
 
 app.use(cors(corsOptions));
