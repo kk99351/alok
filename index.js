@@ -8,9 +8,7 @@ const connectDB = require("./config/ConnectDB");
 const cors = require('cors');
 
 app.use(cors({
-  origin: "http://localhost:3000",
-  methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
-  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
+  origin: "*"
 }));
 
 app.use(bodyParser.json());
