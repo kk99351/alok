@@ -1,12 +1,12 @@
 const express = require("express");
-const router = express.Router();
+const PdfMailer = express.Router();
 const nodemailer = require("nodemailer");
 const fs = require("fs");
 const pdf = require("html-pdf");
 const PdfTemplate = require("../helper/PdfTemplate");
 const FormPdfmodel = require("../models/FormPdfmodel");
 
-router.post("/pdf-mailer", async (req, res) => {
+PdfMailer.post("/pdf-mailer", async (req, res) => {
   try {
     const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
       req.body;
@@ -94,4 +94,4 @@ World Visa Travels
   }
 });
 
-module.exports = router;
+module.exports = PdfMailer;

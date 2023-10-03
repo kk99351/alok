@@ -7,7 +7,6 @@ const pdfMailer = require("./routes/PdfMailer");
 const connectDB = require("./config/ConnectDB");
 const cors = require('cors');
 
-
 app.use(cors({
   origin: "http://localhost:3000",
   methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH'],
