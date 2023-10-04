@@ -20,9 +20,9 @@ app.post('/pdf/pdf_veiw',async(req,res)=>{
   try {
     const { name, phone, citizen, srcCountry, dstCountry, email, Type } = req.body;
 
-    console.log("Request received:", name, phone, citizen, srcCountry, dstCountry, email);
+    // console.log("Request received:", name, phone, citizen, srcCountry, dstCountry, email);
 
-    // Generate PDF
+    // // Generate PDF
     // const htmlContent = PdfTemplate(citizen, dstCountry, Type);
     // const pdfOptions = {
     //   format: "Letter",
@@ -49,32 +49,32 @@ app.post('/pdf/pdf_veiw',async(req,res)=>{
     // const pdfBytes = fs.readFileSync(pdfPath);
 
     // Send email
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: "eclecticatmsl23@gmail.com",
-        pass: "okotejdvjinfjwff",
-      },
-      debug: true,
-    });
+    // const transporter = nodemailer.createTransport({
+    //   host: "smtp.gmail.com",
+    //   port: 587,
+    //   secure: false,
+    //   requireTLS: true,
+    //   auth: {
+    //     user: "eclecticatmsl23@gmail.com",
+    //     pass: "okotejdvjinfjwff",
+    //   },
+    //   debug: true,
+    // });
 
-    const mailOptions = {
-      from: "eclecticatmsl23@gmail.com",
-      to: email,
-      subject: "Thank You for Submitting Your Visa Application Form",
-      text: `Dear ${name},\n\n...`, // Your email content here
-      // attachments: [
-      //   {
-      //     filename: "generated.pdf",
-      //     content: pdfBytes,
-      //   },
-      // ],
-    };
+    // const mailOptions = {
+    //   from: "eclecticatmsl23@gmail.com",
+    //   to: email,
+    //   subject: "Thank You for Submitting Your Visa Application Form",
+    //   text: `Dear ${name},\n\n...`, // Your email content here
+    //   attachments: [
+    //     {
+    //       filename: "generated.pdf",
+    //       content: pdfBytes,
+    //     },
+    //   ],
+    // };
 
-    await transporter.sendMail(mailOptions);
+    // await transporter.sendMail(mailOptions);
 
     // Save user data to the database
     const newUser = await FormPdfmodel.create({
