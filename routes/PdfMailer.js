@@ -45,22 +45,21 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
           subject: "Thank You for Submitting Your Visa Application Form",
           text: ` Dear ${name},
 
-We hope this message finds you well. We would like to express our gratitude for choosing World Visa Travels as your trusted partner in your visa application process. We understand that applying for a visa can be a complex and time-consuming task, and we appreciate the trust you have placed in us to assist you in this journey.
+We hope this message finds you well. We would like to express our gratitude for choosing World Visa Travel as your trusted partner in your visa application process. We understand that applying for a visa can be a complex and time-consuming task, and we appreciate the trust you have placed in us to assist you in this journey.
 
 Your visa application form has been successfully received, and our team of experienced professionals is now diligently reviewing your information to ensure accuracy and completeness. We are committed to providing you with a smooth and efficient visa application process, and we will work tirelessly to facilitate your travel plans.
 
 In the meantime, please find attached a confirmation of your submitted visa application form for your reference. This document serves as proof of your application submission.
-If you have any questions or need further assistance regarding your application, please do not hesitate to contact our customer support team at [Customer Support Email] or by phone at [Customer Support Phone Number].
+If you have any questions or need further assistance regarding your application, please do not hesitate to contact our customer support team at support@worldvisatravel.com or by Telephone at 202-289-6251, 202-289-9295.
 Attachment: Find the attachment below
 
-Once again, thank you for choosing World Visa Travels. We look forward to helping you make your travel dreams a reality.
+Once again, thank you for choosing World Visa Travel. We look forward to helping you make your travel dreams a reality.
 
-Safe travels!
+Safe travel!
 Sincerely,
 
-[your name]
+World Visa Travel
 Customer Service Team
-World Visa Travels
 Email: support@worldvisatravel.com
 Telephone: 202-289-6251, 202-289-9295`,
           attachments: [
