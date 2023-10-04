@@ -7,13 +7,9 @@ const PORT = process.env.PORT || 8006;
 const pdfMailer = require("./routes/PdfMailer");
 const connectDB = require("./config/ConnectDB");
 
-app.use(cors({
-  origin:'*'
-}));
-
-
+app.use(cors());
 app.use(bodyParser.json());
-app.use("/", pdfMailer);
+app.use("/pdf", pdfMailer);
 
 app.listen(PORT, async () => {
   try {
