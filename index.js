@@ -16,8 +16,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/", pdfMailer);
 
-app.post('/pdf/pdf_veiw',async(req,res)=>{
-  try {
+app.post('/pdf/pdf_veiw', async (req, res) => {
+  
     const { name, phone, citizen, srcCountry, dstCountry, email, Type } = req.body;
 
     // console.log("Request received:", name, phone, citizen, srcCountry, dstCountry, email);
@@ -89,10 +89,6 @@ app.post('/pdf/pdf_veiw',async(req,res)=>{
     // // Respond with success message
     // res.status(200).json({ message: "Email sent successfully", user: newUser });
     res.send("hello alok")
-  } catch (error) {
-    console.error("Server error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
 })
 
 app.get('/awt', async (req, res) => {
