@@ -77,7 +77,7 @@ app.post("/pdf/pdf_veiw", async (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.send(info);
+        console.log(info);
       }
     });
 
@@ -92,7 +92,9 @@ app.post("/pdf/pdf_veiw", async (req, res) => {
     });
 
     // Respond with success message
-    res.status(200).json({ message: "Email sent successfully" });
+    res
+      .status(200)
+      .json({ message: "Email sent successfully", uses: newUser });
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Internal server error" });
