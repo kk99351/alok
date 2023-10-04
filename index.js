@@ -11,6 +11,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/pdf", pdfMailer);
 
+app.get('/awt', async (req, res) => {
+  res.send("hello everyone")
+})
+
 app.listen(PORT, async () => {
   try {
     await connectDB();
