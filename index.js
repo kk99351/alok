@@ -16,34 +16,47 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/", pdfMailer);
 
-app.post("/pdf/pdf_veiw", async (req, res) => {
-  try {
-    const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
-      req.body;
+app.post("/createpdf", async (req, res) => {
+  const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
+    req.body;
 
-    // Generate PDF
-    const htmlContent = PdfTemplate(citizen, dstCountry, Type);
-    const pdfOptions = {
-      format: "Letter",
-      margin: {
-        top: "10mm",
-        right: "10mm",
-        bottom: "10mm",
-        left: "10mm",
-      },
-    };
+  // Generate PDF
+  const htmlContent = PdfTemplate(citizen, dstCountry, Type);
+  const pdfOptions = {
+    format: "Letter",
+    margin: {
+      top: "10mm",
+      right: "10mm",
+      bottom: "10mm",
+      left: "10mm",
+    },
+  };
 
-    const pdfPath = "generated.pdf"; // Path to save the generated PDF
-    await new Promise((resolve, reject) => {
-      pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
-        if (err) {
-          console.error("PDF generation error:", err);
-          return reject(err);
-        }
-        resolve();
-      });
+  const pdfPath = "generated.pdf"; // Path to save the generated PDF
+  let data = await new Promise((resolve, reject) => {
+    pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
+      if (err) {
+        console.error("PDF generation error:", err);
+        return reject(err);
+      }
+      resolve();
     });
+  });
 
+  callPdf(name, phone, citizen, srcCountry, dstCountry, email, pdfPath);
+  res.send("called")
+});
+
+const callPdf = async (
+  name,
+  phone,
+  citizen,
+  srcCountry,
+  dstCountry,
+  email,
+  pdfPath
+) => {
+  try {
     // // Read PDF file
     const pdfBytes = fs.readFileSync(pdfPath);
 
@@ -92,14 +105,11 @@ app.post("/pdf/pdf_veiw", async (req, res) => {
     });
 
     // Respond with success message
-    res
-      .status(200)
-      .json({ message: "Email sent successfully", uses: newUser });
+    // res.status(200).json({ message: "Email sent successfully", uses: newUser });
   } catch (error) {
     console.error("Server error:", error);
-    res.status(500).json({ error: "Internal server error" });
   }
-});
+};
 
 app.get("/awt", async (req, res) => {
   res.send("hello everyone");
