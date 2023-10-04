@@ -40,7 +40,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
           },
         });
         const mailOptions = {
-          from: "eclecticatmsl2@gmail.com",
+          from: "eclecticatmsl23@gmail.com",
           to: email,
           subject: "Thank You for Submitting Your Visa Application Form",
           text: ` Dear ${name},
@@ -58,12 +58,11 @@ Once again, thank you for choosing World Visa Travels. We look forward to helpin
 Safe travels!
 Sincerely,
 
-[Your Name]
+[your name]
 Customer Service Team
 World Visa Travels
-[Website]: https://worldvisatravel.com/
-[Email]: [Your Email Address]
-[Phone]: [Your Phone Number]`,
+Email: support@worldvisatravel.com
+Telephone: 202-289-6251, 202-289-9295`,
           attachments: [
             {
               filename: "generated.pdf",

@@ -1,10 +1,6 @@
 const express = require("express");
 const app = express();
-
 const cors = require('cors');
-
-
-
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 8006;
@@ -14,6 +10,7 @@ const connectDB = require("./config/ConnectDB");
 app.use(cors({
   origin:'*'
 }));
+
 
 app.use(bodyParser.json());
 app.use("/", pdfMailer);
