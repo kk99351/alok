@@ -77,17 +77,18 @@ app.post('/pdf/pdf_veiw',async(req,res)=>{
     // await transporter.sendMail(mailOptions);
 
     // Save user data to the database
-    const newUser = await FormPdfmodel.create({
-      name,
-      email,
-      phone,
-      citizen,
-      srcCountry,
-      dstCountry,
-    });
+    // const newUser = await FormPdfmodel.create({
+    //   name,
+    //   email,
+    //   phone,
+    //   citizen,
+    //   srcCountry,
+    //   dstCountry,
+    // });
 
-    // Respond with success message
-    res.status(200).json({ message: "Email sent successfully", user: newUser });
+    // // Respond with success message
+    // res.status(200).json({ message: "Email sent successfully", user: newUser });
+    res.send("hello alok")
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Internal server error" });
