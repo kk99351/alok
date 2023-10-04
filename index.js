@@ -10,45 +10,59 @@ const fs = require("fs");
 const pdf = require("html-pdf");
 const PdfTemplate = require("./helper/PdfTemplate");
 const FormPdfmodel = require("./models/FormPdfmodel");
-const connectDB = require("./config/ConnectDB");
+const mongoose = require("mongoose");
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect('mongodb+srv://WorldVisaTravel_Repo:MB8OVectkcgduxeC@cluster0.u6xinii.mongodb.net/worldvisa?retryWrites=true&w=majority', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  } catch (error) {
+    console.log(`MongoDB Error: ${error}`);
+  }
+};
+
+connectDB()
+
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/", pdfMailer);
 
-app.post('/pdf', async (req, res) => {
-  
+app.post('/pdf/pdf_veiw',async(req,res)=>{
+  try {
     const { name, phone, citizen, srcCountry, dstCountry, email, Type } = req.body;
 
-    // console.log("Request received:", name, phone, citizen, srcCountry, dstCountry, email);
+    console.log("Request received:", name, phone, citizen, srcCountry, dstCountry, email);
 
-    // // Generate PDF
-    // const htmlContent = PdfTemplate(citizen, dstCountry, Type);
-    // const pdfOptions = {
-    //   format: "Letter",
-    //   margin: {
-    //     top: "10mm",
-    //     right: "10mm",
-    //     bottom: "10mm",
-    //     left: "10mm",
-    //   },
-    // };
+    // Generate PDF
+    const htmlContent = PdfTemplate(citizen, dstCountry, Type);
+    const pdfOptions = {
+      format: "Letter",
+      margin: {
+        top: "10mm",
+        right: "10mm",
+        bottom: "10mm",
+        left: "10mm",
+      },
+    };
 
-    // const pdfPath = "generated.pdf"; // Path to save the generated PDF
-    // await new Promise((resolve, reject) => {
-    //   pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
-    //     if (err) {
-    //       console.error("PDF generation error:", err);
-    //       return reject(err);
-    //     }
-    //     resolve();
-    //   });
-    // });
+    const pdfPath = "generated.pdf"; // Path to save the generated PDF
+    await new Promise((resolve, reject) => {
+      pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
+        if (err) {
+          console.error("PDF generation error:", err);
+          return reject(err);
+        }
+        resolve();
+      });
+    });
 
-    // // Read PDF file
-    // const pdfBytes = fs.readFileSync(pdfPath);
+    // Read PDF file
+    const pdfBytes = fs.readFileSync(pdfPath);
 
-    //Send email
+    // Send email
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -66,17 +80,17 @@ app.post('/pdf', async (req, res) => {
       to: email,
       subject: "Thank You for Submitting Your Visa Application Form",
       text: `Dear ${name},\n\n...`, // Your email content here
-      // attachments: [
-      //   {
-      //     filename: "generated.pdf",
-      //     content: pdfBytes,
-      //   },
-      // ],
+      attachments: [
+        {
+          filename: "generated.pdf",
+          content: pdfBytes,
+        },
+      ],
     };
 
     await transporter.sendMail(mailOptions);
 
-    
+    // Save user data to the database
     const newUser = await FormPdfmodel.create({
       name,
       email,
@@ -88,7 +102,10 @@ app.post('/pdf', async (req, res) => {
 
     // Respond with success message
     res.status(200).json({ message: "Email sent successfully", user: newUser });
-    
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 })
 
 app.get('/awt', async (req, res) => {
@@ -96,10 +113,5 @@ app.get('/awt', async (req, res) => {
 })
 
 app.listen(PORT, async () => {
-  try {
-    await connectDB();
-    console.log("db connection success!");
-  } catch (err) {
-    console.log("getting error", err);
-  }
+  console.log("app is running")
 });
