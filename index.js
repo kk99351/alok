@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 require("./config/ConnectDB");
 const bodyParser = require("body-parser");
-const PORT = 8081;
+const PORT = 8082;
 const pdfMailer = require("./routes/PdfMailer");
 const nodemailer = require("nodemailer");
 const fs = require("fs");
@@ -16,11 +16,15 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/", pdfMailer);
 
-app.post("/createpdf", async (req, res) => {
-  const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
-    req.body;
-
-  // Generate PDF
+const generate = async (
+  name,
+  phone,
+  citizen,
+  srcCountry,
+  dstCountry,
+  email,
+  Type
+) => {
   const htmlContent = PdfTemplate(citizen, dstCountry, Type);
   const pdfOptions = {
     format: "Letter",
@@ -43,24 +47,28 @@ app.post("/createpdf", async (req, res) => {
     });
   });
 
-  callPdf(name, phone, citizen, srcCountry, dstCountry, email, pdfPath);
-  res.send("called")
-});
+  const pdfBytes = fs.readFileSync(pdfPath);
+  return pdfBytes;
+};
 
-const callPdf = async (
-  name,
-  phone,
-  citizen,
-  srcCountry,
-  dstCountry,
-  email,
-  pdfPath
-) => {
+// Generate PDF
+
+app.post("/getpdf", async (req, res) => {
   try {
     // // Read PDF file
-    const pdfBytes = fs.readFileSync(pdfPath);
 
+    const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
+      req.body;
     // Send email
+    let data = await generate(
+      name,
+      phone,
+      citizen,
+      srcCountry,
+      dstCountry,
+      email,
+      Type
+    );
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -81,7 +89,7 @@ const callPdf = async (
       attachments: [
         {
           filename: "generated.pdf",
-          content: pdfBytes,
+          content: data,
         },
       ],
     };
@@ -105,11 +113,11 @@ const callPdf = async (
     });
 
     // Respond with success message
-    // res.status(200).json({ message: "Email sent successfully", uses: newUser });
+    res.status(200).json({ message: "Email sent successfully", uses: newUser });
   } catch (error) {
     console.error("Server error:", error);
   }
-};
+});
 
 app.get("/awt", async (req, res) => {
   res.send("hello everyone");
