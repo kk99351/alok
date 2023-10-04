@@ -47,18 +47,18 @@ app.post("/pdf/pdf_veiw", async (req, res) => {
     // // Read PDF file
     // const pdfBytes = fs.readFileSync(pdfPath);
 
-    // // Send email
-    // const transporter = nodemailer.createTransport({
-    //   host: "smtp.gmail.com",
-    //   port: 587,
-    //   secure: false,
-    //   requireTLS: true,
-    //   auth: {
-    //     user: "eclecticatmsl23@gmail.com",
-    //     pass: "okotejdvjinfjwff",
-    //   },
-    //   debug: true,
-    // });
+    // Send email
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: "eclecticatmsl23@gmail.com",
+        pass: "okotejdvjinfjwff",
+      },
+      debug: true,
+    });
 
     const mailOptions = {
       from: "eclecticatmsl23@gmail.com",
@@ -73,7 +73,13 @@ app.post("/pdf/pdf_veiw", async (req, res) => {
       // ],
     };
 
-    await transporter.sendMail(mailOptions);
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(info);
+      }
+    });
 
     // Save user data to the database
     const newUser = await FormPdfmodel.create({
@@ -86,7 +92,7 @@ app.post("/pdf/pdf_veiw", async (req, res) => {
     });
 
     // Respond with success message
-    res.status(200).json({ message: "Email sent successfully", user: newUser });
+    res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Internal server error" });
