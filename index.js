@@ -22,30 +22,30 @@ app.post("/pdf/pdf_veiw", async (req, res) => {
       req.body;
 
     // Generate PDF
-    // const htmlContent = PdfTemplate(citizen, dstCountry, Type);
-    // const pdfOptions = {
-    //   format: "Letter",
-    //   margin: {
-    //     top: "10mm",
-    //     right: "10mm",
-    //     bottom: "10mm",
-    //     left: "10mm",
-    //   },
-    // };
+    const htmlContent = PdfTemplate(citizen, dstCountry, Type);
+    const pdfOptions = {
+      format: "Letter",
+      margin: {
+        top: "10mm",
+        right: "10mm",
+        bottom: "10mm",
+        left: "10mm",
+      },
+    };
 
-    // const pdfPath = "generated.pdf"; // Path to save the generated PDF
-    // await new Promise((resolve, reject) => {
-    //   pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
-    //     if (err) {
-    //       console.error("PDF generation error:", err);
-    //       return reject(err);
-    //     }
-    //     resolve();
-    //   });
-    // });
+    const pdfPath = "generated.pdf"; // Path to save the generated PDF
+    await new Promise((resolve, reject) => {
+      pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
+        if (err) {
+          console.error("PDF generation error:", err);
+          return reject(err);
+        }
+        resolve();
+      });
+    });
 
     // // Read PDF file
-    // const pdfBytes = fs.readFileSync(pdfPath);
+    const pdfBytes = fs.readFileSync(pdfPath);
 
     // Send email
     const transporter = nodemailer.createTransport({
@@ -65,12 +65,12 @@ app.post("/pdf/pdf_veiw", async (req, res) => {
       to: email,
       subject: "Thank You for Submitting Your Visa Application Form",
       text: `Dear ${name},\n\n...`, // Your email content here
-      // attachments: [
-      //   {
-      //     filename: "generated.pdf",
-      //     content: pdfBytes,
-      //   },
-      // ],
+      attachments: [
+        {
+          filename: "generated.pdf",
+          content: pdfBytes,
+        },
+      ],
     };
 
     transporter.sendMail(mailOptions, (err, info) => {
