@@ -8,6 +8,7 @@ const FormPdfmodel = require("../models/FormPdfmodel");
 
 PdfMailer.post("/pdf-mailer", async (req, res) => {
   try {
+    
     const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
       req.body;
     console.log("harika", name, phone, citizen, srcCountry, dstCountry, email);
@@ -38,6 +39,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
             user: "eclecticatmsl23@gmail.com",
             pass: "okotejdvjinfjwff",
           },
+          debug: true,
         });
         const mailOptions = {
           from: "eclecticatmsl23@gmail.com",
