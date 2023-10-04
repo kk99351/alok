@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 require("dotenv").config();
+require("./config/ConnectDB");
 const bodyParser = require("body-parser");
 const PORT = 8081;
 const pdfMailer = require("./routes/PdfMailer");
@@ -10,85 +11,79 @@ const fs = require("fs");
 const pdf = require("html-pdf");
 const PdfTemplate = require("./helper/PdfTemplate");
 const FormPdfmodel = require("./models/FormPdfmodel");
-const mongoose = require("mongoose");
-
-const connectDB = async () => {
-  try {
-    await mongoose.connect('mongodb+srv://WorldVisaTravel_Repo:MB8OVectkcgduxeC@cluster0.u6xinii.mongodb.net/worldvisa?retryWrites=true&w=majority', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  } catch (error) {
-    console.log(`MongoDB Error: ${error}`);
-  }
-};
-
-connectDB()
-
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/", pdfMailer);
 
-app.post('/pdf/pdf_veiw',async(req,res)=>{
+app.post("/pdf/pdf_veiw", async (req, res) => {
   try {
-    const { name, phone, citizen, srcCountry, dstCountry, email, Type } = req.body;
+    const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
+      req.body;
 
-    console.log("Request received:", name, phone, citizen, srcCountry, dstCountry, email);
+    console.log(
+      "Request received:",
+      name,
+      phone,
+      citizen,
+      srcCountry,
+      dstCountry,
+      email
+    );
 
-    // // Generate PDF
-    // const htmlContent = PdfTemplate(citizen, dstCountry, Type);
-    // const pdfOptions = {
-    //   format: "Letter",
-    //   margin: {
-    //     top: "10mm",
-    //     right: "10mm",
-    //     bottom: "10mm",
-    //     left: "10mm",
-    //   },
-    // };
+    // Generate PDF
+    const htmlContent = PdfTemplate(citizen, dstCountry, Type);
+    const pdfOptions = {
+      format: "Letter",
+      margin: {
+        top: "10mm",
+        right: "10mm",
+        bottom: "10mm",
+        left: "10mm",
+      },
+    };
 
-    // const pdfPath = "generated.pdf"; // Path to save the generated PDF
-    // await new Promise((resolve, reject) => {
-    //   pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
-    //     if (err) {
-    //       console.error("PDF generation error:", err);
-    //       return reject(err);
-    //     }
-    //     resolve();
-    //   });
-    // });
+    const pdfPath = "generated.pdf"; // Path to save the generated PDF
+    await new Promise((resolve, reject) => {
+      pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
+        if (err) {
+          console.error("PDF generation error:", err);
+          return reject(err);
+        }
+        resolve();
+      });
+    });
 
-    // // Read PDF file
-    // const pdfBytes = fs.readFileSync(pdfPath);
+    // Read PDF file
+    const pdfBytes = fs.readFileSync(pdfPath);
 
-    // // Send email
-    // const transporter = nodemailer.createTransport({
-    //   host: "smtp.gmail.com",
-    //   port: 587,
-    //   secure: false,
-    //   requireTLS: true,
-    //   auth: {
-    //     user: "eclecticatmsl23@gmail.com",
-    //     pass: "okotejdvjinfjwff",
-    //   },
-    //   debug: true,
-    // });
+    // Send email
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: "eclecticatmsl23@gmail.com",
+        pass: "okotejdvjinfjwff",
+      },
+      debug: true,
+    });
 
-    // const mailOptions = {
-    //   from: "eclecticatmsl23@gmail.com",
-    //   to: email,
-    //   subject: "Thank You for Submitting Your Visa Application Form",
-    //   text: `Dear ${name},\n\n...`, // Your email content here
-    //   attachments: [
-    //     {
-    //       filename: "generated.pdf",
-    //       content: pdfBytes,
-    //     },
-    //   ],
-    // };
+    const mailOptions = {
+      from: "eclecticatmsl23@gmail.com",
+      to: email,
+      subject: "Thank You for Submitting Your Visa Application Form",
+      text: `Dear ${name},\n\n...`, // Your email content here
+      attachments: [
+        {
+          filename: "generated.pdf",
+          content: pdfBytes,
+        },
+      ],
+    };
 
-    // await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
 
     // Save user data to the database
     const newUser = await FormPdfmodel.create({
@@ -106,12 +101,12 @@ app.post('/pdf/pdf_veiw',async(req,res)=>{
     console.error("Server error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-})
+});
 
-app.get('/awt', async (req, res) => {
-  res.send("hello everyone")
-})
+app.get("/awt", async (req, res) => {
+  res.send("hello everyone");
+});
 
 app.listen(PORT, async () => {
-  console.log("app is running")
+  console.log("app is running");
 });
