@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 require("dotenv").config();
 const bodyParser = require("body-parser");
-const PORT = process.env.PORT || 8006;
+const PORT = 8080;
 const pdfMailer = require("./routes/PdfMailer");
 const connectDB = require("./config/ConnectDB");
 
