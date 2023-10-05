@@ -42,7 +42,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
     // as the generated file is located
     // in project root dir (/), but
     // current file is in /routes
-    const pdfPath = path.join(__dirname, "..", "generated.pdf"); // Path to save the generated PDF
+    const pdfPath = path.join(__dirname, "/../generated.pdf"); // Path to save the generated PDF
     await new Promise((resolve, reject) => {
       pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
         if (err) {
