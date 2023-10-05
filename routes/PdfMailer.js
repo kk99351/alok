@@ -5,6 +5,10 @@ const fs = require("fs");
 const pdf = require("html-pdf");
 const PdfTemplate = require("../helper/PdfTemplate");
 const FormPdfmodel = require("../models/FormPdfmodel");
+const path = require("path");
+
+// To get path to phantom
+const phantomPath = require('witch')('phantomjs-prebuilt', 'phantomjs');
 
 PdfMailer.post("/pdf-mailer", async (req, res) => {
   try {
@@ -24,6 +28,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
     // Generate PDF
     const htmlContent = PdfTemplate(citizen, dstCountry, Type);
     const pdfOptions = {
+      phantomPath,
       format: "Letter",
       margin: {
         top: "10mm",
@@ -33,19 +38,14 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
       },
     };
 
-    const pdfPath = "generated.pdf"; // Path to save the generated PDF
-    await new Promise((resolve, reject) => {
-      pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
-        if (err) {
-          console.error("PDF generation error:", err);
-          return reject(err);
-        }
-        resolve();
+    const pdfBytes = await new Promise((resolve, reject) => {
+      pdf.create(htmlContent, pdfOptions).toBuffer((error, buffer) => {
+        if (error)
+          return reject(error);
+
+        resolve(buffer);
       });
     });
-
-    // Read PDF file
-    const pdfBytes = fs.readFileSync(pdfPath);
 
     // Send email
     const transporter = nodemailer.createTransport({
@@ -62,7 +62,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
 
     const mailOptions = {
       from: "eclecticatmsl23@gmail.com",
-      to: "alokkumar11746@gmail.com",
+      to: email,
       subject: "Thank You for Submitting Your Visa Application Form",
       text: `Dear`, // Your email content here
       attachments: [

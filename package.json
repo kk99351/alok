@@ -20,6 +20,9 @@
     "nodemailer": "^6.9.5",
     "nodemon": "^3.0.1",
     "pdf-lib": "^1.17.1",
-    "vercel": "^32.4.1"
+    "phantomjs": "^2.1.7",
+    "phantomjs-prebuilt": "^2.1.16",
+    "vercel": "^32.4.1",
+    "witch": "^1.0.3"
   }
 }
