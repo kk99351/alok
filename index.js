@@ -16,15 +16,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/", pdfMailer);
 
-const generate = async (
-  name,
-  phone,
-  citizen,
-  srcCountry,
-  dstCountry,
-  email,
-  Type
-) => {
+app.post("/createpdf", async (req, res) => {
+  const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
+    req.body;
+
+  // Generate PDF
   const htmlContent = PdfTemplate(citizen, dstCountry, Type);
   const pdfOptions = {
     format: "Letter",
@@ -37,7 +33,7 @@ const generate = async (
   };
 
   const pdfPath = "generated.pdf"; // Path to save the generated PDF
-  let data = await new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
       if (err) {
         console.error("PDF generation error:", err);
@@ -48,27 +44,32 @@ const generate = async (
   });
 
   const pdfBytes = fs.readFileSync(pdfPath);
-  return pdfBytes;
-};
-
-// Generate PDF
+  if (pdfBytes) {
+    res.status(200).json({
+      message: "Successfully",
+      data: pdfBytes,
+    });
+    console.log(pdfBytes);
+  }
+});
 
 app.post("/getpdf", async (req, res) => {
   try {
     // // Read PDF file
-
-    const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
-      req.body;
     // Send email
-    let data = await generate(
+    const pdfBytes = fs.readFileSync('generated.pdf');
+    console.log(pdfBytes);
+
+    const {
       name,
       phone,
       citizen,
       srcCountry,
       dstCountry,
       email,
-      Type
-    );
+      Type,
+    } = req.body;
+
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
@@ -89,7 +90,7 @@ app.post("/getpdf", async (req, res) => {
       attachments: [
         {
           filename: "generated.pdf",
-          content: data,
+          content: pdfBytes,
         },
       ],
     };
