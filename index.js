@@ -57,49 +57,43 @@ app.post("/getpdf", async (req, res) => {
   try {
     // // Read PDF file
     // Send email
-    const pdfBytes = fs.readFileSync('generated.pdf');
-    console.log(pdfBytes);
+    const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
+      req.body;
 
-    const {
-      name,
-      phone,
-      citizen,
-      srcCountry,
-      dstCountry,
-      email,
-      Type,
-    } = req.body;
+    fs.readFile("generated.pdf", "utf8", function (err, data) {
+      if (data) {
+        const transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 587,
+          secure: false,
+          requireTLS: true,
+          auth: {
+            user: "eclecticatmsl23@gmail.com",
+            pass: "okotejdvjinfjwff",
+          },
+          debug: true,
+        });
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: "eclecticatmsl23@gmail.com",
-        pass: "okotejdvjinfjwff",
-      },
-      debug: true,
-    });
+        const mailOptions = {
+          from: "eclecticatmsl23@gmail.com",
+          to: email,
+          subject: "Thank You for Submitting Your Visa Application Form",
+          text: `Dear ${name},\n\n...`, // Your email content here
+          attachments: [
+            {
+              filename: "generated.pdf",
+              content: data,
+            },
+          ],
+        };
 
-    const mailOptions = {
-      from: "eclecticatmsl23@gmail.com",
-      to: email,
-      subject: "Thank You for Submitting Your Visa Application Form",
-      text: `Dear ${name},\n\n...`, // Your email content here
-      attachments: [
-        {
-          filename: "generated.pdf",
-          content: pdfBytes,
-        },
-      ],
-    };
-
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(info);
+        transporter.sendMail(mailOptions, (err, info) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(info);
+          }
+        });
       }
     });
 
