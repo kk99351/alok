@@ -11,41 +11,41 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
     const { name, phone, citizen, srcCountry, dstCountry, email, Type } =
       req.body;
 
-    // console.log(
-    //   "Request received:",
-    //   name,
-    //   phone,
-    //   citizen,
-    //   srcCountry,
-    //   dstCountry,
-    //   email
-    // );
+    console.log(
+      "Request received:",
+      name,
+      phone,
+      citizen,
+      srcCountry,
+      dstCountry,
+      email
+    );
 
-    // // Generate PDF
-    // const htmlContent = PdfTemplate(citizen, dstCountry, Type);
-    // const pdfOptions = {
-    //   format: "Letter",
-    //   margin: {
-    //     top: "10mm",
-    //     right: "10mm",
-    //     bottom: "10mm",
-    //     left: "10mm",
-    //   },
-    // };
+    // Generate PDF
+    const htmlContent = PdfTemplate(citizen, dstCountry, Type);
+    const pdfOptions = {
+      format: "Letter",
+      margin: {
+        top: "10mm",
+        right: "10mm",
+        bottom: "10mm",
+        left: "10mm",
+      },
+    };
 
-    // const pdfPath = "generated.pdf"; // Path to save the generated PDF
-    // await new Promise((resolve, reject) => {
-    //   pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
-    //     if (err) {
-    //       console.error("PDF generation error:", err);
-    //       return reject(err);
-    //     }
-    //     resolve();
-    //   });
-    // });
+    const pdfPath = "generated.pdf"; // Path to save the generated PDF
+    await new Promise((resolve, reject) => {
+      pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
+        if (err) {
+          console.error("PDF generation error:", err);
+          return reject(err);
+        }
+        resolve();
+      });
+    });
 
-    // // Read PDF file
-    // const pdfBytes = fs.readFileSync(pdfPath);
+    // Read PDF file
+    const pdfBytes = fs.readFileSync(pdfPath);
 
     // Send email
     const transporter = nodemailer.createTransport({
@@ -65,12 +65,12 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
       to: "alokkumar11746@gmail.com",
       subject: "Thank You for Submitting Your Visa Application Form",
       text: `Dear`, // Your email content here
-      // attachments: [
-      //   {
-      //     filename: "generated.pdf",
-      //     content: pdfBytes,
-      //   },
-      // ],
+      attachments: [
+        {
+          filename: "generated.pdf",
+          content: pdfBytes,
+        },
+      ],
     };
 
     await transporter.sendMail(mailOptions);
