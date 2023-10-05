@@ -38,23 +38,14 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
       },
     };
 
-    // Using path to resolve path
-    // as the generated file is located
-    // in project root dir (/), but
-    // current file is in /routes
-    const pdfPath = path.join(__dirname, "/../generated.pdf"); // Path to save the generated PDF
-    await new Promise((resolve, reject) => {
-      pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
-        if (err) {
-          console.error("PDF generation error:", err);
-          return reject(err);
-        }
-        resolve();
+    const pdfBytes = await new Promise((resolve, reject) => {
+      pdf.create(htmlContent, pdfOptions).toBuffer((error, buffer) => {
+        if (error)
+          return reject(error);
+
+        resolve(buffer);
       });
     });
-
-    // Read PDF file
-    const pdfBytes = fs.readFileSync(pdfPath);
 
     // Send email
     const transporter = nodemailer.createTransport({
