@@ -5,6 +5,7 @@ const fs = require("fs");
 const pdf = require("html-pdf");
 const PdfTemplate = require("../helper/PdfTemplate");
 const FormPdfmodel = require("../models/FormPdfmodel");
+const path = require("path");
 
 // To get path to phantom
 const phantomPath = require('witch')('phantomjs-prebuilt', 'phantomjs');
@@ -37,7 +38,11 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
       },
     };
 
-    const pdfPath = "generated.pdf"; // Path to save the generated PDF
+    // Using path to resolve path
+    // as the generated file is located
+    // in project root dir (/), but
+    // current file is in /routes
+    const pdfPath = path.join(__dirname, "..", "generated.pdf"); // Path to save the generated PDF
     await new Promise((resolve, reject) => {
       pdf.create(htmlContent, pdfOptions).toFile(pdfPath, (err) => {
         if (err) {
@@ -66,7 +71,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
 
     const mailOptions = {
       from: "eclecticatmsl23@gmail.com",
-      to: "alokkumar11746@gmail.com",
+      to: email,
       subject: "Thank You for Submitting Your Visa Application Form",
       text: `Dear`, // Your email content here
       attachments: [
