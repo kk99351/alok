@@ -72,20 +72,24 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
           ],
         };
 
-        await transporter.sendMail(mailOptions);
-        const newUser = await FormPdfmodel.create({
-          name,
-          email,
-          phone,
-          citizen,
-          srcCountry,
-          dstCountry,
-        });
 
-        // Respond with success message
-        res
-          .status(200)
-          .json({ message: "Email sent successfully", user: newUser });
+       
+
+        await transporter.sendMail(mailOptions);
+        res.send("application")
+        // const newUser = await FormPdfmodel.create({
+        //   name,
+        //   email,
+        //   phone,
+        //   citizen,
+        //   srcCountry,
+        //   dstCountry,
+        // });
+
+        // // Respond with success message
+        // res
+        //   .status(200)
+        //   .json({ message: "Email sent successfully", user: newUser });
       }
     });
 
