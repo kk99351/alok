@@ -73,23 +73,25 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
+        const newUser = await FormPdfmodel.create({
+          name,
+          email,
+          phone,
+          citizen,
+          srcCountry,
+          dstCountry,
+        });
+
+        // Respond with success message
+        res
+          .status(200)
+          .json({ message: "Email sent successfully", user: newUser });
       }
     });
 
     // Send email
 
     // Save user data to the database
-    const newUser = await FormPdfmodel.create({
-      name,
-      email,
-      phone,
-      citizen,
-      srcCountry,
-      dstCountry,
-    });
-
-    // Respond with success message
-    res.status(200).json({ message: "Email sent successfully", user: newUser });
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ error: "Internal server error" });
