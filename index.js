@@ -10,6 +10,6 @@ const pdfMailer = require("./routes/PdfMailer");
 app.use(bodyParser.json());
 app.use("/pdf", pdfMailer);
 
-app.listen(8006, async () => {
+app.listen(process.env.PORT || 3000, async () => {
   console.log("listening on port");
 });
