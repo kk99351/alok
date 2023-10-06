@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 app.get('/generate-pdf-and-send-email', async (req, res) => {
   try {
     // Create a Puppeteer browser instance
-    const browser = await puppeteer.launch({headless:true});
+    const browser = await puppeteer.launch( {headless: 'new'});
     const page = await browser.newPage();
 
     // Generate your dynamic content and create a PDF
