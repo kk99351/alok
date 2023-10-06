@@ -1,14 +1,9 @@
 const express = require("express");
 const PdfMailer = express.Router();
 const nodemailer = require("nodemailer");
-const fs = require("fs");
-const pdf = require("html-pdf");
+const html_to_pdf = require('html-pdf-node');
 const PdfTemplate = require("../helper/PdfTemplate");
 const FormPdfmodel = require("../models/FormPdfmodel");
-const path = require("path");
-
-// To get path to phantom
- const phantomPath = require('witch')('phantomjs-prebuilt', 'phantomjs');
 
 PdfMailer.post("/pdf-mailer", async (req, res) => {
   try {
@@ -28,7 +23,6 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
     // Generate PDF
     const htmlContent = PdfTemplate(citizen, dstCountry, Type);
     const pdfOptions = {
-       phantomPath,
       format: "Letter",
       margin: {
         top: "10mm",
@@ -39,7 +33,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
     };
 
     const pdfBytes = await new Promise((resolve, reject) => {
-      pdf.create(htmlContent, pdfOptions).toBuffer((error, buffer) => {
+      html_to_pdf.generatePdf({ content: htmlContent }, pdfOptions, (error, buffer) => {
         if (error)
           return reject(error);
 
