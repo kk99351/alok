@@ -8,7 +8,7 @@ const FormPdfmodel = require("../models/FormPdfmodel");
 const path = require("path");
 
 // To get path to phantom
-const phantomPath = require('witch')('phantomjs-prebuilt', 'phantomjs');
+// const phantomPath = require('witch')('phantomjs-prebuilt', 'phantomjs');
 
 PdfMailer.post("/pdf-mailer", async (req, res) => {
   try {
@@ -28,7 +28,7 @@ PdfMailer.post("/pdf-mailer", async (req, res) => {
     // Generate PDF
     const htmlContent = PdfTemplate(citizen, dstCountry, Type);
     const pdfOptions = {
-      phantomPath,
+      // phantomPath,
       format: "Letter",
       margin: {
         top: "10mm",

@@ -5,7 +5,7 @@ require("dotenv").config();
 require("./config/ConnectDB");
 const bodyParser=require("body-parser");
 const PdfMailer = require("./routes/PdfMailer");
-const PORT = 4002;
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -15,6 +15,6 @@ app.get("/awt", async (req, res) => {
   res.send("hello everyone");
 });
 
-app.listen(PORT, async () => {
+app.listen(4000, async () => {
   console.log("app is running");
 });
